@@ -93,7 +93,7 @@ public class IcebergErrorMapper {
     switch (status.statusCode()) {
       case NESSIE_ERROR:
       case ICEBERG_ERROR:
-        LOGGER.debug("Propagating storage failure to client: {}", status, ex);
+        LOGGER.info("Propagating storage failure to client: {}", status, ex);
         break;
       default:
         LOGGER.info("Propagating storage failure to client: {}", status, ex);

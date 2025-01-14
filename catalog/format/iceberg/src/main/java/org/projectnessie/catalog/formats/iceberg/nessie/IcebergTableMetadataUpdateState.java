@@ -18,6 +18,7 @@ package org.projectnessie.catalog.formats.iceberg.nessie;
 import static java.time.Instant.now;
 import static java.util.Collections.emptyMap;
 
+import java.io.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -48,6 +49,7 @@ import org.projectnessie.model.ContentKey;
  * </ul>
  */
 public class IcebergTableMetadataUpdateState {
+
   private final NessieTableSnapshot.Builder builder;
   private final ContentKey key;
   private final boolean tableExists;
@@ -63,7 +65,10 @@ public class IcebergTableMetadataUpdateState {
   private final Set<CatalogOps> catalogOps = EnumSet.noneOf(CatalogOps.class);
 
   public IcebergTableMetadataUpdateState(
-      NessieTableSnapshot snapshot, ContentKey key, boolean tableExists) {
+    NessieTableSnapshot snapshot,
+    ContentKey key,
+    boolean tableExists
+  ) {
     this.snapshot = snapshot;
     this.builder = NessieTableSnapshot.builder().from(snapshot);
     this.key = key;
@@ -140,16 +145,20 @@ public class IcebergTableMetadataUpdateState {
   }
 
   public IcebergTableMetadataUpdateState checkRequirements(
-      List<IcebergUpdateRequirement> requirements) {
+    List<IcebergUpdateRequirement> requirements
+  ) {
     for (IcebergUpdateRequirement requirement : requirements) {
       requirement.checkForTable(snapshot, tableExists, key);
     }
     return this;
   }
 
-  public IcebergTableMetadataUpdateState applyUpdates(List<IcebergMetadataUpdate> updates) {
+  public IcebergTableMetadataUpdateState applyUpdates(
+    List<IcebergMetadataUpdate> updates
+  ) {
     Instant now = now();
     for (IcebergMetadataUpdate update : updates) {
+      System.out.println(update);
       update.applyToTable(this);
       snapshot = builder.lastUpdatedTimestamp(now).build();
     }

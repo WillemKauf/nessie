@@ -121,7 +121,7 @@ class AuthorizationCodeFlow extends AbstractFlow {
             .queryParam("redirect_uri", redirectUri)
             .queryParam("state", state)
             .build();
-    LOGGER.debug("Authorization Code Flow: started, redirect URI: {}", redirectUri);
+    LOGGER.info("Authorization Code Flow: started, redirect URI: {}", redirectUri);
   }
 
   @Override
@@ -131,7 +131,7 @@ class AuthorizationCodeFlow extends AbstractFlow {
 
   private void doClose() {
     inflightRequestsPhaser.arriveAndAwaitAdvance();
-    LOGGER.debug("Authorization Code Flow: closing");
+    LOGGER.info("Authorization Code Flow: closing");
     server.stop(0);
     // don't close the HTTP client nor the console, they are not ours
   }
@@ -178,7 +178,7 @@ class AuthorizationCodeFlow extends AbstractFlow {
    * until the tokens are received.
    */
   private void doRequest(HttpExchange exchange) {
-    LOGGER.debug("Authorization Code Flow: received request");
+    LOGGER.info("Authorization Code Flow: received request");
     inflightRequestsPhaser.register();
     redirectUriFuture.complete(exchange); // will trigger the token fetching the first time
     tokensFuture
@@ -190,7 +190,7 @@ class AuthorizationCodeFlow extends AbstractFlow {
   /** Send the response to the incoming HTTP request to the redirect URI. */
   private Void doResponse(HttpExchange exchange, Throwable error) {
     if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug(
+      LOGGER.info(
           "Authorization Code Flow: sending response, error: {}",
           error == null ? "none" : error.toString());
     }
@@ -201,13 +201,13 @@ class AuthorizationCodeFlow extends AbstractFlow {
         writeResponse(exchange, HTTP_UNAUTHORIZED, HTML_TEMPLATE_FAILED, error.toString());
       }
     } catch (IOException e) {
-      LOGGER.debug("Authorization Code Flow: error writing response", e);
+      LOGGER.info("Authorization Code Flow: error writing response", e);
     }
     return null;
   }
 
   private String extractAuthorizationCode(HttpExchange exchange) {
-    LOGGER.debug("Authorization Code Flow: extracting code");
+    LOGGER.info("Authorization Code Flow: extracting code");
     Map<String, String> params = HttpUtils.parseQueryString(exchange.getRequestURI().getQuery());
     if (!state.equals(params.get("state"))) {
       throw new IllegalArgumentException("Missing or invalid state");
@@ -220,20 +220,20 @@ class AuthorizationCodeFlow extends AbstractFlow {
   }
 
   private Tokens fetchNewTokens(String code) {
-    LOGGER.debug("Authorization Code Flow: fetching new tokens");
+    LOGGER.info("Authorization Code Flow: fetching new tokens");
     AuthorizationCodeTokenRequest.Builder request =
         AuthorizationCodeTokenRequest.builder().code(code).redirectUri(redirectUri);
     Tokens tokens = invokeTokenEndpoint(request, AuthorizationCodeTokenResponse.class);
-    LOGGER.debug("Authorization Code Flow: new tokens received");
+    LOGGER.info("Authorization Code Flow: new tokens received");
     return tokens;
   }
 
   private void log(Throwable error) {
     if (LOGGER.isDebugEnabled()) {
       if (error == null) {
-        LOGGER.debug("Authorization Code Flow: tokens received");
+        LOGGER.info("Authorization Code Flow: tokens received");
       } else {
-        LOGGER.debug("Authorization Code Flow: error fetching tokens: {}", error.toString());
+        LOGGER.info("Authorization Code Flow: error fetching tokens: {}", error.toString());
       }
     }
   }

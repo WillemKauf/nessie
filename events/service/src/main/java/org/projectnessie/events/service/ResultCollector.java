@@ -68,7 +68,7 @@ public class ResultCollector implements Consumer<Result> {
   @Override
   public void accept(Result result) {
     if (shouldProcess(result)) {
-      LOGGER.debug("Processing received result: {}", result);
+      LOGGER.info("Processing received result: {}", result);
       VersionStoreEvent event =
           ImmutableVersionStoreEvent.builder()
               .result(result)
@@ -77,7 +77,7 @@ public class ResultCollector implements Consumer<Result> {
               .build();
       forwardToEventService(event);
     } else {
-      LOGGER.debug("Ignoring received result: {}", result);
+      LOGGER.info("Ignoring received result: {}", result);
     }
   }
 

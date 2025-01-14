@@ -122,7 +122,7 @@ final class DependencyResolver {
       throw e;
     }
 
-    LOGGER.debug(
+    LOGGER.info(
         "Resolved artifact '{}' to {} artifact results",
         collectRequest.getRoot().getArtifact(),
         dependencyResult.getArtifactResults().size());

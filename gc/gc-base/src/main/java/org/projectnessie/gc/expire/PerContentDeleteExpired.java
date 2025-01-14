@@ -61,7 +61,7 @@ public abstract class PerContentDeleteExpired {
         l -> {
           synchronized (baseLocations) {
             if (baseLocations.add(l)) {
-              LOGGER.debug(
+              LOGGER.info(
                   "live-set#{} content#{}: Identified base location {}",
                   expireParameters().liveContentSet().id(),
                   contentId(),
@@ -111,7 +111,7 @@ public abstract class PerContentDeleteExpired {
   @SuppressWarnings("UnstableApiUsage")
   private long identifyLiveFiles(
       BloomFilter<StorageUri> filter, Consumer<StorageUri> addBaseLocation) {
-    LOGGER.debug(
+    LOGGER.info(
         "live-set#{} content#{}: Start collecting files and base locations, max file modification time: {}.",
         expireParameters().liveContentSet().id(),
         contentId(),
@@ -136,7 +136,7 @@ public abstract class PerContentDeleteExpired {
               .count();
     }
 
-    LOGGER.debug(
+    LOGGER.info(
         "live-set#{} content#{}: Identified {} live files (configured: {}), with an expected "
             + "false-positive-probability of {} (configured: {}).",
         expireParameters().liveContentSet().id(),
@@ -160,7 +160,7 @@ public abstract class PerContentDeleteExpired {
     ExpireStats expireStats = new ExpireStats();
     long maxFileTime = expireParameters().maxFileModificationTime().toEpochMilli();
 
-    LOGGER.debug(
+    LOGGER.info(
         "live-set#{} content#{}: Start walking base location {}.",
         expireParameters().liveContentSet().id(),
         contentId(),

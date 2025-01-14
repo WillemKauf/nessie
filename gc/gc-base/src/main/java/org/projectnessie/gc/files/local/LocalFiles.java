@@ -91,7 +91,7 @@ public class LocalFiles implements FilesLister, FileDeleter {
     } catch (NoSuchFileException e) {
       return DeleteResult.SUCCESS;
     } catch (IOException e) {
-      LOGGER.debug("Failed to delete {}", fileReference, e);
+      LOGGER.info("Failed to delete {}", fileReference, e);
       return DeleteResult.FAILURE;
     }
   }

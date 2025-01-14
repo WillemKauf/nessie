@@ -50,7 +50,7 @@ public final class RestCommon {
 
     String stack = includeExceptionStackTrace ? Throwables.getStackTraceAsString(e) : null;
 
-    LOGGER.debug(
+    LOGGER.info(
         "Failure on server, propagated to client. Status: {} {}, Message: {}.",
         statusCode,
         statusReason,

@@ -66,7 +66,7 @@ class DeviceCodeFlow extends AbstractFlow {
     flowTimeout = config.getDeviceCodeFlowTimeout();
     pollInterval = config.getDeviceCodeFlowPollInterval();
     closeFuture.thenRun(this::doClose);
-    LOGGER.debug("Device Code Flow: started");
+    LOGGER.info("Device Code Flow: started");
     executor = Executors.newSingleThreadScheduledExecutor();
   }
 
@@ -76,7 +76,7 @@ class DeviceCodeFlow extends AbstractFlow {
   }
 
   private void doClose() {
-    LOGGER.debug("Device Code Flow: closing");
+    LOGGER.info("Device Code Flow: closing");
     executor.shutdownNow();
     pollFuture = null;
     // don't close the HTTP client nor the console, they are not ours
@@ -129,7 +129,7 @@ class DeviceCodeFlow extends AbstractFlow {
     if (!config.ignoreDeviceCodeFlowServerPollInterval()
         && serverPollInterval != null
         && serverPollInterval > pollInterval.getSeconds()) {
-      LOGGER.debug(
+      LOGGER.info(
           "Device Code Flow: server requested minimum poll interval of {} seconds",
           serverPollInterval);
       pollInterval = Duration.ofSeconds(serverPollInterval);
@@ -150,16 +150,16 @@ class DeviceCodeFlow extends AbstractFlow {
 
   private void pollForNewTokens(String deviceCode) {
     try {
-      LOGGER.debug("Device Code Flow: polling for new tokens");
+      LOGGER.info("Device Code Flow: polling for new tokens");
       DeviceCodeTokenRequest.Builder request =
           DeviceCodeTokenRequest.builder().deviceCode(deviceCode);
       Tokens tokens = invokeTokenEndpoint(request, DeviceCodeTokenResponse.class);
-      LOGGER.debug("Device Code Flow: new tokens received");
+      LOGGER.info("Device Code Flow: new tokens received");
       tokensFuture.complete(tokens);
     } catch (OAuth2Exception e) {
       switch (e.getErrorCode()) {
         case "authorization_pending":
-          LOGGER.debug("Device Code Flow: waiting for authorization to complete");
+          LOGGER.info("Device Code Flow: waiting for authorization to complete");
           pollFuture =
               executor.schedule(
                   () -> pollForNewTokens(deviceCode),
@@ -167,7 +167,7 @@ class DeviceCodeFlow extends AbstractFlow {
                   TimeUnit.MILLISECONDS);
           return;
         case "slow_down":
-          LOGGER.debug("Device Code Flow: server requested to slow down");
+          LOGGER.info("Device Code Flow: server requested to slow down");
           Duration pollInterval = this.pollInterval;
           if (!config.ignoreDeviceCodeFlowServerPollInterval()) {
             pollInterval = pollInterval.plus(pollInterval);

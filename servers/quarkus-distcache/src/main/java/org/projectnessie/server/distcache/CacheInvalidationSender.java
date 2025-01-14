@@ -189,7 +189,7 @@ public class CacheInvalidationSender implements DistributedCacheInvalidation {
       invalidations.add(invalidation);
 
       if (!triggered) {
-        LOGGER.trace("Triggered invalidation submission");
+        LOGGER.info("Triggered invalidation submission");
         vertx.executeBlocking(this::sendInvalidations);
         triggered = true;
       }
@@ -206,7 +206,7 @@ public class CacheInvalidationSender implements DistributedCacheInvalidation {
         try {
           invalidations.drainTo(batch, 100);
           if (batch.isEmpty()) {
-            LOGGER.trace("Done sending invalidations");
+            LOGGER.info("Done sending invalidations");
             triggered = false;
             break;
           }
@@ -235,7 +235,7 @@ public class CacheInvalidationSender implements DistributedCacheInvalidation {
   @VisibleForTesting
   List<Future<Map.Entry<HttpClientResponse, Buffer>>> submit(
       List<CacheInvalidation> batch, List<String> resolvedAddresses) {
-    LOGGER.trace("Submitting {} invalidations", batch.size());
+    LOGGER.info("Submitting {} invalidations", batch.size());
 
     String json;
     try {
@@ -272,7 +272,7 @@ public class CacheInvalidationSender implements DistributedCacheInvalidation {
                           resp.statusMessage(),
                           success.getValue());
                     } else {
-                      LOGGER.trace(
+                      LOGGER.info(
                           "{} cache invalidations sent to {}:{}", batch.size(), address, httpPort);
                     }
                   },

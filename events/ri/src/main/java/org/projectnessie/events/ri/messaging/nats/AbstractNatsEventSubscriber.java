@@ -66,7 +66,7 @@ public abstract class AbstractNatsEventSubscriber<T> extends AbstractMessagingEv
           metadata.get(PublishMessageMetadata.class).orElseThrow();
       String id = jetStreamMetadata.messageId();
       String subject = jetStreamMetadata.subject();
-      LOGGER.debug("Event written: messageId={}, subject={}", id, subject);
+      LOGGER.info("Event written: messageId={}, subject={}", id, subject);
     }
     return CompletableFuture.completedFuture(null); // immediate ack
   }

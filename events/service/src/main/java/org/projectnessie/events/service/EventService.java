@@ -147,36 +147,36 @@ public class EventService implements AutoCloseable {
   }
 
   private void onCommitResult(CommitResult result, String repositoryId, @Nullable Principal user) {
-    LOGGER.debug("Received commit result: {}", result);
+    LOGGER.info("Received commit result: {}", result);
     fireCommitEvent(result.getCommit(), result.getTargetBranch(), repositoryId, user);
   }
 
   private void onMergeResult(MergeResult result, String repositoryId, @Nullable Principal user) {
-    LOGGER.debug("Received merge result: {}", result);
+    LOGGER.info("Received merge result: {}", result);
     fireMergeEvent(result, repositoryId, user);
   }
 
   private void onTransplantResult(
       TransplantResult result, String repositoryId, @Nullable Principal user) {
-    LOGGER.debug("Received transplant result: {}", result);
+    LOGGER.info("Received transplant result: {}", result);
     fireTransplantEvent(result, repositoryId, user);
   }
 
   private void onReferenceCreatedResult(
       ReferenceCreatedResult result, String repositoryId, @Nullable Principal user) {
-    LOGGER.debug("Received branch created result: {}", result);
+    LOGGER.info("Received branch created result: {}", result);
     fireEvent(factory.newReferenceCreatedEvent(result, repositoryId, user));
   }
 
   private void onReferenceAssignedResult(
       ReferenceAssignedResult result, String repositoryId, @Nullable Principal user) {
-    LOGGER.debug("Received reference assigned result: {}", result);
+    LOGGER.info("Received reference assigned result: {}", result);
     fireEvent(factory.newReferenceUpdatedEvent(result, repositoryId, user));
   }
 
   private void onReferenceDeletedResult(
       ReferenceDeletedResult result, String repositoryId, @Nullable Principal user) {
-    LOGGER.debug("Received reference deleted result: {}", result);
+    LOGGER.info("Received reference deleted result: {}", result);
     fireEvent(factory.newReferenceDeletedEvent(result, repositoryId, user));
   }
 
@@ -237,7 +237,7 @@ public class EventService implements AutoCloseable {
    *     more sophisticated delivery mechanism, e.g. using an asynchronous event bus.
    */
   protected void fireEvent(Event event) {
-    LOGGER.debug("Firing {} event: {}", event.getType(), event);
+    LOGGER.info("Firing {} event: {}", event.getType(), event);
     for (Map.Entry<EventSubscription, EventSubscriber> entry :
         subscribers.getSubscriptions().entrySet()) {
       EventSubscription subscription = entry.getKey();
@@ -252,11 +252,11 @@ public class EventService implements AutoCloseable {
     MDC.put(EVENT_ID_MDC_KEY, event.getIdAsText());
     try {
       if (subscriber.accepts(event)) {
-        LOGGER.debug("Delivering event to subscriber {}: {}", subscriber, event);
+        LOGGER.info("Delivering event to subscriber {}: {}", subscriber, event);
         subscriber.onEvent(event);
-        LOGGER.debug("Event successfully delivered: {}", event);
+        LOGGER.info("Event successfully delivered: {}", event);
       } else {
-        LOGGER.debug("Subscriber rejected event: {}", event);
+        LOGGER.info("Subscriber rejected event: {}", event);
       }
     } catch (Exception e) {
       LOGGER.error("Event could not be delivered: {}", event, e);

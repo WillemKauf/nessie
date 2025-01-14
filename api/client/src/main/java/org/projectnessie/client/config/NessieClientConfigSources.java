@@ -136,7 +136,7 @@ public final class NessieClientConfigSources {
       public String getValue(@Nonnull @jakarta.annotation.Nonnull String key) {
         String envName = propertyNameToEnvironmentName(key);
         String v = props.getProperty(envName);
-        LOGGER.debug("Config value for key {} as {} retrieved from {}", key, envName, envFile);
+        LOGGER.info("Config value for key {} as {} retrieved from {}", key, envName, envFile);
         return v;
       }
     };
@@ -158,7 +158,7 @@ public final class NessieClientConfigSources {
       public String getValue(@Nonnull @jakarta.annotation.Nonnull String key) {
         String envName = propertyNameToEnvironmentName(key);
         String v = environment.get(envName);
-        LOGGER.debug("Config value for key {} as {} retrieved from environment", key, envName);
+        LOGGER.info("Config value for key {} as {} retrieved from environment", key, envName);
         return v;
       }
     };
@@ -182,7 +182,7 @@ public final class NessieClientConfigSources {
       @Override
       public String getValue(@Nonnull @jakarta.annotation.Nonnull String key) {
         String v = props.getProperty(key);
-        LOGGER.debug("Config value for key {} retrieved from {}", key, propertiesFile);
+        LOGGER.info("Config value for key {} retrieved from {}", key, propertiesFile);
         return v;
       }
     };
@@ -201,7 +201,7 @@ public final class NessieClientConfigSources {
       @Override
       public String getValue(@Nonnull @jakarta.annotation.Nonnull String key) {
         String v = properties.getProperty(key);
-        LOGGER.debug("Config value for key {} retrieved from properties", key);
+        LOGGER.info("Config value for key {} retrieved from properties", key);
         return v;
       }
     };
@@ -219,7 +219,7 @@ public final class NessieClientConfigSources {
       @Override
       public String getValue(@Nonnull @jakarta.annotation.Nonnull String key) {
         String v = properties.get(key);
-        LOGGER.debug("Config value for key {} retrieved from map", key);
+        LOGGER.info("Config value for key {} retrieved from map", key);
         return v;
       }
     };

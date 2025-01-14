@@ -70,7 +70,7 @@ public abstract class AbstractKafkaEventSubscriber<T> extends AbstractMessagingE
       Object key = kafkaMetadata.getKey();
       Header eventIdHeader = kafkaMetadata.getHeaders().lastHeader(MessageHeaders.EVENT_ID.key());
       String eventId = new String(eventIdHeader.value(), UTF_8);
-      LOGGER.debug("Event written to Kafka: key={}, id={}", key, eventId);
+      LOGGER.info("Event written to Kafka: key={}, id={}", key, eventId);
     }
     return CompletableFuture.completedFuture(null); // immediate ack
   }

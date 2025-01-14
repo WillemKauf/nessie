@@ -356,7 +356,7 @@ final class ReferenceLogicImpl implements ReferenceLogic {
       Reference created = commitToIndex.created;
       Reference existing;
 
-      LOGGER.debug(
+      LOGGER.info(
           "Committed create reference {} with outcome {}, existing is {}",
           created,
           commitToIndex.kind,
@@ -441,16 +441,16 @@ final class ReferenceLogicImpl implements ReferenceLogic {
 
     if (!actAsAlreadyDeleted) {
       persist.markReferenceAsDeleted(reference);
-      LOGGER.debug("Reference {} marked as deleted", reference);
+      LOGGER.info("Reference {} marked as deleted", reference);
     }
 
-    LOGGER.debug("Commit deleted reference {}", reference);
+    LOGGER.info("Commit deleted reference {}", reference);
     commitDeleteReference(reference, null);
-    LOGGER.debug("Committed deleted reference {}", reference);
+    LOGGER.info("Committed deleted reference {}", reference);
 
     try {
       persist.purgeReference(reference);
-      LOGGER.debug("Reference {} purged", reference);
+      LOGGER.info("Reference {} purged", reference);
     } catch (RefNotFoundException ignore) {
       // deleted via "deletion recovery" - from another thread/process
     }
@@ -796,12 +796,12 @@ final class ReferenceLogicImpl implements ReferenceLogic {
             return null;
           }
 
-          LOGGER.debug(
+          LOGGER.info(
               "Recovering reference creation {} from commit op {}",
               ref,
               commitOp.content().action());
           ref = persist.addReference(ref);
-          LOGGER.debug(
+          LOGGER.info(
               "Recovered reference creation {} from commit op {}",
               ref,
               commitOp.content().action());
@@ -830,12 +830,12 @@ final class ReferenceLogicImpl implements ReferenceLogic {
             return ref;
           }
 
-          LOGGER.debug(
+          LOGGER.info(
               "Recovering reference deletion commit for {} from commit op {}",
               ref,
               commitOp.content().action());
           commitDeleteReference(ref, suppliedIndex.pointer());
-          LOGGER.debug(
+          LOGGER.info(
               "Recovered reference deletion commit for {} from commit op {}",
               ref,
               commitOp.content().action());
@@ -844,7 +844,7 @@ final class ReferenceLogicImpl implements ReferenceLogic {
         } catch (RefNotFoundException | RefConditionFailedException e) {
           // ignore
         } catch (RetryTimeoutException e) {
-          LOGGER.debug(
+          LOGGER.info(
               "Recovery of reference deletion commit-retry failed for {} from commit op {}",
               ref,
               commitOp.content().action(),
@@ -862,13 +862,13 @@ final class ReferenceLogicImpl implements ReferenceLogic {
       } else {
         // Reference marked as deleted in index, purge it.
         try {
-          LOGGER.debug(
+          LOGGER.info(
               "Recovering reference purge for {} from commit op {}",
               ref,
               commitOp.content().action());
           persist.purgeReference(ref);
         } catch (RefNotFoundException | RefConditionFailedException e) {
-          LOGGER.debug(
+          LOGGER.info(
               "Recovery of reference purge for {} from commit op {} failed",
               ref,
               commitOp.content().action(),

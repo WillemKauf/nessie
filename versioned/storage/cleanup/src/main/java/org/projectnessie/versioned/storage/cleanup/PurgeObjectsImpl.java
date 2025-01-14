@@ -125,7 +125,7 @@ final class PurgeObjectsImpl implements PurgeObjects {
     var persist = purgeObjectsContext.persist();
 
     var objType = obj.type();
-    LOGGER.trace(
+    LOGGER.info(
         "Deleting obj {} of type {}/{} in repository '{}'",
         obj.id(),
         objType.name(),

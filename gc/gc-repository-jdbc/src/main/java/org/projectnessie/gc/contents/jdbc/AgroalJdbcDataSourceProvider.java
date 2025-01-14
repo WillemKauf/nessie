@@ -136,24 +136,24 @@ public abstract class AgroalJdbcDataSourceProvider implements JdbcDataSourceProv
         poolConfiguration.connectionFactoryConfiguration();
 
     if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("Connecting to JDBC URL {}", jdbcUrl());
+      LOGGER.info("Connecting to JDBC URL {}", jdbcUrl());
       for (Object credential : credentials()) {
         if (credential instanceof NamePrincipal) {
-          LOGGER.debug(
+          LOGGER.info(
               "Connecting using name principal {}", ((NamePrincipal) credential).getName());
         } else if (credential instanceof SimplePassword) {
-          LOGGER.debug("Connecting using given password (not logged)");
+          LOGGER.info("Connecting using given password (not logged)");
         }
       }
 
-      LOGGER.debug(
+      LOGGER.info(
           "JDBC pool options: initial-size={}, max-size={}, min-size={}, connection-lifetime={}, acquisition-timeout={}",
           poolInitialSize(),
           poolMaxSize(),
           poolMinSize(),
           poolConnectionLifetime(),
           poolAcquisitionTimeout());
-      jdbcProperties().forEach((k, v) -> LOGGER.debug("Using JDBC property {}={}", k, v));
+      jdbcProperties().forEach((k, v) -> LOGGER.info("Using JDBC property {}={}", k, v));
     }
 
     poolConfiguration

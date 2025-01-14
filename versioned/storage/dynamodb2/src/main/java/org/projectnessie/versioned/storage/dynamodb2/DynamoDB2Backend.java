@@ -99,7 +99,7 @@ public final class DynamoDB2Backend implements Backend {
       verifyKeySchema(table.table());
       return true;
     } catch (ResourceNotFoundException e) {
-      LOGGER.debug("Didn't find table '{}', going to create one.", name, e);
+      LOGGER.info("Didn't find table '{}', going to create one.", name, e);
       return false;
     }
   }

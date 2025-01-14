@@ -121,7 +121,7 @@ public class PersistProvider {
    */
   public void eagerPersistInitialization(
       @Observes StartupEvent event, @NotObserved Persist persist) {
-    LOGGER.debug("Eager initialization of persist implementation '{}'", persist.name());
+    LOGGER.info("Eager initialization of persist implementation '{}'", persist.name());
   }
 
   @Produces

@@ -208,14 +208,14 @@ final class ReferencedObjectsResolverImpl implements ReferencedObjectsResolver {
     var persist = referencedObjectsContext.persist();
 
     if (reference.deleted()) {
-      LOGGER.trace(
+      LOGGER.info(
           "Skipping deleted reference {} in repository '{}'",
           reference.name(),
           persist.config().repositoryId());
       return;
     }
 
-    LOGGER.debug(
+    LOGGER.info(
         "Walking reference {} in repository '{}' starting at commit {}",
         reference.name(),
         persist.config().repositoryId(),
@@ -263,7 +263,7 @@ final class ReferencedObjectsResolverImpl implements ReferencedObjectsResolver {
 
     var persist = referencedObjectsContext.persist();
 
-    LOGGER.debug(
+    LOGGER.info(
         "Handling commit {} in repository '{}'", commit.id(), persist.config().repositoryId());
 
     stats.numUniqueCommits++;
@@ -320,7 +320,7 @@ final class ReferencedObjectsResolverImpl implements ReferencedObjectsResolver {
 
     var persist = referencedObjectsContext.persist();
 
-    LOGGER.debug(
+    LOGGER.info(
         "Fetching {} pending objects in repository '{}'",
         pendingObjs.size(),
         persist.config().repositoryId());
@@ -350,7 +350,7 @@ final class ReferencedObjectsResolverImpl implements ReferencedObjectsResolver {
 
     var objType = obj.type();
 
-    LOGGER.debug(
+    LOGGER.info(
         "Handling obj {} of type {}/{} in repository '{}'",
         obj.id(),
         objType.name(),

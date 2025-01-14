@@ -222,7 +222,7 @@ public abstract class IdentifyLiveContents {
     if (visitedDeduplicator().alreadyVisited(cutoffPolicy.timestamp(), namedReference.getHash())) {
       // This commit-ID has already been visited with the same (or maybe an older/smaller)
       // cut-off-timestamp, can abort.
-      LOGGER.debug(
+      LOGGER.info(
           "live-set#{}: Not submitting task to walk {}, it has already already visited using a"
               + "compatible cut-off timestamp.",
           addContents.id(),
@@ -280,7 +280,7 @@ public abstract class IdentifyLiveContents {
         // The HEAD commit is always live, consult cutoff-policy for all other commits
         if (lastCommitId == null || !cutoffPolicy.isCutoff(commitTime, numCommits)) {
           // commit is "live"
-          LOGGER.debug(
+          LOGGER.info(
               "live-set#{}: Checking commit {} with {} operations via {}.",
               addContents.id(),
               commitHash,
@@ -300,7 +300,7 @@ public abstract class IdentifyLiveContents {
                             Operation.Put put = (Operation.Put) operation;
                             Content content = put.getContent();
 
-                            LOGGER.debug(
+                            LOGGER.info(
                                 "live-set#{}: Adding content reference for {} from commit {}.",
                                 addContents.id(),
                                 put,

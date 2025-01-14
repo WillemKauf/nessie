@@ -73,11 +73,11 @@ final class OAuth2TokenRefreshExecutor extends ScheduledThreadPoolExecutor
       Thread thread =
           new Thread(
               () -> {
-                LOGGER.debug("[{}] Starting new OAuth2 token refresh thread", clientName);
+                LOGGER.info("[{}] Starting new OAuth2 token refresh thread", clientName);
                 try {
                   r.run();
                 } finally {
-                  LOGGER.debug("[{}] OAuth2 token refresh thread exiting", clientName);
+                  LOGGER.info("[{}] OAuth2 token refresh thread exiting", clientName);
                 }
               });
       thread.setName(clientName + "-token-refresh-" + threadCounter.incrementAndGet());

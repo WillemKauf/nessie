@@ -58,7 +58,7 @@ final class JerseyForOldServerClassLoader extends ClassLoader {
       throw new ClassNotFoundException(name);
     }
 
-    LOGGER.debug("Loading class {}' for Nessie server version '{}'", name, version);
+    LOGGER.info("Loading class {}' for Nessie server version '{}'", name, version);
 
     try (InputStream in = url.openConnection().getInputStream()) {
       ByteArrayOutputStream out = new ByteArrayOutputStream();

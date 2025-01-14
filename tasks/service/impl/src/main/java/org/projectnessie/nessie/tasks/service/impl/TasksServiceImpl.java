@@ -148,7 +148,7 @@ public class TasksServiceImpl implements TasksService {
                 id -> {
                   metrics.startNewTaskController();
                   ExecParams execParams = new ExecParams(persist, taskRequest);
-                  LOGGER.trace("{}: Starting new local task controller for {}", name, execParams);
+                  LOGGER.info("{}: Starting new local task controller for {}", name, execParams);
                   async.call(() -> tryLocal(execParams));
                   return execParams.resultFuture;
                 });
@@ -181,14 +181,14 @@ public class TasksServiceImpl implements TasksService {
     params.lock.lock();
     try {
       metrics.taskAttempt();
-      LOGGER.trace("{}: Task evaluation attempt for {}", name, params);
+      LOGGER.info("{}: Task evaluation attempt for {}", name, params);
 
       TaskObj obj = castObj(params.taskRequest, params.persist.fetchObj(params.objId()));
       // keep in mind: `obj` might be a locally cached instance that is not in sync w/ the
       // database!
 
       TaskState state = obj.taskState();
-      LOGGER.trace("{}: Evaluating task for {} with state {}", name, params, state);
+      LOGGER.info("{}: Evaluating task for {} with state {}", name, params, state);
 
       switch (state.status()) {
         case SUCCESS:
@@ -212,7 +212,7 @@ public class TasksServiceImpl implements TasksService {
       }
 
     } catch (ObjNotFoundException e) {
-      LOGGER.trace("{}: Task for {} does not yet exist, creating", name, params);
+      LOGGER.info("{}: Task for {} does not yet exist, creating", name, params);
 
       try {
         metrics.taskCreation();
@@ -227,10 +227,10 @@ public class TasksServiceImpl implements TasksService {
                     .taskState(behavior.runningTaskState(async.clock(), null)));
 
         if (params.persist.storeObj(obj)) {
-          LOGGER.trace("{}: Task creation for {} succeeded", name, params);
+          LOGGER.info("{}: Task creation for {} succeeded", name, params);
           issueLocalTaskExecution(params, obj);
         } else {
-          LOGGER.trace("{}: Task creation for {} failed, retrying", name, params);
+          LOGGER.info("{}: Task creation for {} failed, retrying", name, params);
 
           // Another process stored the task-obj for the task-request, reschedule but do not loop to
           // be "nice" and give other requests the ability to run.
@@ -318,7 +318,7 @@ public class TasksServiceImpl implements TasksService {
 
   // Called while ExecParams is locked from tryLocal()
   private void issueLocalTaskExecution(ExecParams params, TaskObj obj) {
-    LOGGER.debug("{}: Starting local task execution for {}", name, params);
+    LOGGER.info("{}: Starting local task execution for {}", name, params);
     metrics.taskExecution();
 
     params.runningObj = obj;
@@ -350,13 +350,13 @@ public class TasksServiceImpl implements TasksService {
       if (resultBuilder != null) {
         TaskObj r = withNewVersionToken(resultBuilder);
 
-        LOGGER.trace("{}, Task execution for {} succeeded, updating database", name, params);
+        LOGGER.info("{}, Task execution for {} succeeded, updating database", name, params);
 
         // Task execution succeeded with a final result
         if (params.persist.updateConditional(expected, r)) {
           metrics.taskExecutionResult();
           // Database updated with final result
-          LOGGER.debug(
+          LOGGER.info(
               "{}: Task execution success result for {} updated in database, returning final result",
               name,
               params);
@@ -376,7 +376,7 @@ public class TasksServiceImpl implements TasksService {
             new NullPointerException("Local task execution return a null object, which is illegal");
       }
       if (failure != null) {
-        LOGGER.trace("{}: Task execution for {} failed, updating database", name, params);
+        LOGGER.info("{}: Task execution for {} failed, updating database", name, params);
 
         TaskBehavior<TaskObj, TaskObj.Builder> behavior = params.taskRequest.behavior();
         TaskState newState = behavior.asErrorTaskState(async.clock(), expected, failure);
@@ -387,14 +387,14 @@ public class TasksServiceImpl implements TasksService {
           // Database updated with final result
           if (newState.status().isRetryable()) {
             metrics.taskExecutionRetryableError();
-            LOGGER.debug(
+            LOGGER.info(
                 "{}: Task execution raised retryable error for {} updated in database, retrying",
                 name,
                 params);
             reattemptAfterRetryableError(params, newState.retryNotBefore());
           } else {
             metrics.taskExecutionFailure();
-            LOGGER.debug(
+            LOGGER.info(
                 "{}: Task execution ended in final failure for {} updated in database, returning final result",
                 name,
                 params);
@@ -461,7 +461,7 @@ public class TasksServiceImpl implements TasksService {
       TaskObj current = params.runningObj;
       if (current == null) {
         // Local task execution finished, do nothing.
-        LOGGER.trace(
+        LOGGER.info(
             "{}: Local task execution has finished, no need to update running state for {}",
             name,
             params);
@@ -490,7 +490,7 @@ public class TasksServiceImpl implements TasksService {
             params.runningObj = updated;
             metrics.taskRunningStateUpdated();
             // Current state successfully updated in database, reschedule running task update
-            LOGGER.trace(
+            LOGGER.info(
                 "{}: Successfully updated state for locally running task for {}", name, params);
             scheduleTaskRunningUpdate(params, updated);
           } else {
@@ -511,7 +511,7 @@ public class TasksServiceImpl implements TasksService {
         }
       } else {
         metrics.taskRunningStateUpdateNoLongerRunning();
-        LOGGER.trace(
+        LOGGER.info(
             "{}: Task for {} no longer running, skipping further local running state updates",
             name,
             params);

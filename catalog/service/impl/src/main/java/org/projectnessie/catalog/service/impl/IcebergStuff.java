@@ -111,14 +111,14 @@ public class IcebergStuff {
 
   /** Fetch requested metadata from the database, the snapshot already exists. */
   NessieTableSnapshot mapToTableSnapshot(@Nonnull EntitySnapshotObj snapshotObj) {
-    LOGGER.debug("Fetching table snapshot from database for snapshot ID {}", snapshotObj.id());
+    LOGGER.info("Fetching table snapshot from database for snapshot ID {}", snapshotObj.id());
 
     NessieTableSnapshot tableSnapshot = (NessieTableSnapshot) snapshotObj.snapshot();
     NessieTableSnapshot.Builder snapshotBuilder = NessieTableSnapshot.builder().from(tableSnapshot);
 
     NessieTableSnapshot snapshot;
     snapshot = snapshotBuilder.build();
-    LOGGER.debug(
+    LOGGER.info(
         "Loaded table snapshot with {} schemas and {} partition definitions",
         snapshot.schemas().size(),
         snapshot.partitionDefinitions().size());
@@ -127,14 +127,14 @@ public class IcebergStuff {
 
   /** Fetch requested metadata from the database, the snapshot already exists. */
   NessieViewSnapshot mapToViewSnapshot(@Nonnull EntitySnapshotObj snapshotObj) {
-    LOGGER.debug("Fetching view snapshot from database for snapshot ID {}", snapshotObj.id());
+    LOGGER.info("Fetching view snapshot from database for snapshot ID {}", snapshotObj.id());
 
     NessieViewSnapshot viewSnapshot = (NessieViewSnapshot) snapshotObj.snapshot();
     NessieViewSnapshot.Builder snapshotBuilder = NessieViewSnapshot.builder().from(viewSnapshot);
 
     NessieViewSnapshot snapshot;
     snapshot = snapshotBuilder.build();
-    LOGGER.debug("Loaded view snapshot with {} schemas", snapshot.schemas().size());
+    LOGGER.info("Loaded view snapshot with {} schemas", snapshot.schemas().size());
     return snapshot;
   }
 }

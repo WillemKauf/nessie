@@ -74,7 +74,7 @@ final class JavaResponseContext implements ResponseContext {
   public void close(Exception error) {
     if (error != null) {
       try {
-        LOGGER.debug(
+        LOGGER.info(
             "Closing unprocessed input stream for {} request to {} delegating to {} ...",
             response.request().method(),
             response.uri(),

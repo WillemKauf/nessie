@@ -301,7 +301,7 @@ final class IndexesLogicImpl implements IndexesLogic {
                   () -> {
                     StoreIndex<CommitOp> l = loaded[idx];
                     if (l == null) {
-                      LOGGER.debug(
+                      LOGGER.info(
                           "Individual fetch of stripe #{} of {} stripes for commit {}",
                           idx,
                           loaded.length,
@@ -338,7 +338,7 @@ final class IndexesLogicImpl implements IndexesLogic {
               }
             }
           }
-          LOGGER.debug("Fetching {} of {} index segments for commit {}", cnt, ids.length, commitId);
+          LOGGER.info("Fetching {} of {} index segments for commit {}", cnt, ids.length, commitId);
           StoreIndex<CommitOp>[] indexes = loadIndexSegments(ids);
           for (int i = 0; i < indexes.length; i++) {
             StoreIndex<CommitOp> idx = indexes[i];

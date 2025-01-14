@@ -91,7 +91,7 @@ final class JavaRequest extends BaseHttpRequest {
         requestContext.doesOutput() ? bodyPublisher(requestContext) : BodyPublishers.noBody();
     request = request.method(method.name(), bodyPublisher);
 
-    LOGGER.debug("Sending {} request to {} ...", method, uri);
+    LOGGER.info("Sending {} request to {} ...", method, uri);
     HttpResponse<InputStream> response =
         exchange.send(request.build(), BodyHandlers.ofInputStream());
     return new JavaResponseContext(response);

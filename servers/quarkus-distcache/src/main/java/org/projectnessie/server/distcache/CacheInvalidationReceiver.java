@@ -108,7 +108,7 @@ public class CacheInvalidationReceiver implements DistributedCacheInvalidationCo
       return;
     }
     if (serverInstanceId.equals(senderId)) {
-      LOGGER.trace("Ignoring invalidations from local instance");
+      LOGGER.info("Ignoring invalidations from local instance");
       responseNoContent(rc);
       return;
     }

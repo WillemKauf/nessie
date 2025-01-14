@@ -222,18 +222,18 @@ public abstract class ObjectStorageMock {
       config.register(
           (ContainerRequestFilter)
               requestContext -> {
-                LOGGER.debug(
+                LOGGER.info(
                     "{} {} {}",
                     requestContext.getMethod(),
                     requestContext.getUriInfo().getPath(),
                     requestContext.getUriInfo().getRequestUri().getQuery());
-                requestContext.getHeaders().forEach((k, v) -> LOGGER.debug("  {}: {}", k, v));
+                requestContext.getHeaders().forEach((k, v) -> LOGGER.info("  {}: {}", k, v));
               });
       config.register(
           (ContainerResponseFilter)
               (requestContext, responseContext) -> {
-                LOGGER.debug("{}", responseContext.getStatusInfo());
-                responseContext.getHeaders().forEach((k, v) -> LOGGER.debug("  {}: {}", k, v));
+                LOGGER.info("{}", responseContext.getStatusInfo());
+                responseContext.getHeaders().forEach((k, v) -> LOGGER.info("  {}: {}", k, v));
               });
     }
 

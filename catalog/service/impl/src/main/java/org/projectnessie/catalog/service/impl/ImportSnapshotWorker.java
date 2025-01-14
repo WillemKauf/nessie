@@ -79,7 +79,7 @@ final class ImportSnapshotWorker {
       IcebergTable content, NessieTableSnapshot snapshot) {
     NessieId snapshotId = objIdToNessieId(taskRequest.objId());
 
-    LOGGER.debug(
+    LOGGER.info(
         "{} Iceberg table metadata from object store for snapshot ID {} from {}",
         snapshot == null ? "Fetching" : "Storing",
         taskRequest.objId(),
@@ -157,7 +157,7 @@ final class ImportSnapshotWorker {
       IcebergView content, NessieViewSnapshot snapshot) {
     NessieId snapshotId = objIdToNessieId(taskRequest.objId());
 
-    LOGGER.debug(
+    LOGGER.info(
         "{} Iceberg view metadata from object store for snapshot ID {} from {}",
         snapshot == null ? "Fetching" : "Storing",
         taskRequest.objId(),
@@ -222,7 +222,7 @@ final class ImportSnapshotWorker {
       table = tableBuilder.build();
 
       if (taskRequest.persist().storeObj(buildEntityObj(entityObjId, table))) {
-        LOGGER.debug("Persisted new entity object for content ID {}", content.getId());
+        LOGGER.info("Persisted new entity object for content ID {}", content.getId());
       }
     }
     return table;
@@ -250,7 +250,7 @@ final class ImportSnapshotWorker {
       view = viewBuilder.build();
 
       if (taskRequest.persist().storeObj(buildEntityObj(entityObjId, view))) {
-        LOGGER.debug("Persisted new entity object for content ID {}", content.getId());
+        LOGGER.info("Persisted new entity object for content ID {}", content.getId());
       }
     }
     return view;

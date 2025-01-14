@@ -83,7 +83,7 @@ public class EventSubscribers implements AutoCloseable {
   public synchronized void start(Function<EventSubscriber, EventSubscription> subscriptionFactory) {
     if (!started) {
       if (subscribers.isEmpty()) {
-        LOGGER.debug("No subscribers to start.");
+        LOGGER.info("No subscribers to start.");
         this.subscriptions = Collections.emptyMap();
       } else {
         LOGGER.info("Starting subscribers...");

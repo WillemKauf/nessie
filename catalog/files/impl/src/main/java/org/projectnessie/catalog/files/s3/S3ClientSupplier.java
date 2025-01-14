@@ -92,7 +92,7 @@ public class S3ClientSupplier {
                 serviceConfig -> serviceConfig.profileFile(() -> EMPTY_PROFILE_FILE));
 
     if (LOGGER.isTraceEnabled()) {
-      LOGGER.trace(
+      LOGGER.info(
           "Building S3-client for bucket named '{}' using endpoint {} with {}",
           bucketOptions.name().orElseThrow(),
           bucketOptions.endpoint(),

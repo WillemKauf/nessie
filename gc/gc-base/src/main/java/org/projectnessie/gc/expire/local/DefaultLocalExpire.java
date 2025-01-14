@@ -98,7 +98,7 @@ public abstract class DefaultLocalExpire implements Expire {
   }
 
   private DeleteSummary expireSingleContent(String contentId) {
-    LOGGER.debug(
+    LOGGER.info(
         "live-set#{}: Expiring content ID {}.",
         expireParameters().liveContentSet().id(),
         contentId);

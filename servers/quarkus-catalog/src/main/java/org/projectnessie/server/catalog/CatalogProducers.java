@@ -270,7 +270,7 @@ public class CatalogProducers {
         config.tasksThreadsKeepAlive().toMillis(), TimeUnit.MILLISECONDS);
     executorService.setMaximumPoolSize(maxThreads);
 
-    LOGGER.debug(
+    LOGGER.info(
         "Tasks handling configured with max {} threads, minimum delay of {}ms, race min/max of {}ms/{}ms.",
         maxThreads,
         config.tasksMinimumDelay().toMillis(),

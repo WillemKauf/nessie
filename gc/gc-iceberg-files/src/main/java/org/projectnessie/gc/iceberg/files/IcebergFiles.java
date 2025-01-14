@@ -99,7 +99,7 @@ public abstract class IcebergFiles implements FilesLister, FileDeleter, AutoClos
     fileIO.initialize(properties());
     fileIO.setConf(hadoopConfiguration());
     hasResolvingFileIO = true;
-    LOGGER.debug("Instantiated Iceberg's ResolvingFileIO");
+    LOGGER.info("Instantiated Iceberg's ResolvingFileIO");
     return fileIO;
   }
 
@@ -205,7 +205,7 @@ public abstract class IcebergFiles implements FilesLister, FileDeleter, AutoClos
       fileIO.deleteFile(absolutePath.toString());
       return DeleteResult.SUCCESS;
     } catch (Exception e) {
-      LOGGER.debug("Failed to delete {}", fileReference, e);
+      LOGGER.info("Failed to delete {}", fileReference, e);
       return DeleteResult.FAILURE;
     }
   }
@@ -230,7 +230,7 @@ public abstract class IcebergFiles implements FilesLister, FileDeleter, AutoClos
       fileIo.deleteFiles(files);
     } catch (BulkDeletionFailureException e) {
       failed = e.numberFailedObjects();
-      LOGGER.debug("Failed to delete {} files (no further details available)", failed, e);
+      LOGGER.info("Failed to delete {} files (no further details available)", failed, e);
     }
     return DeleteSummary.of(files.size() - failed, failed);
   }
@@ -246,7 +246,7 @@ public abstract class IcebergFiles implements FilesLister, FileDeleter, AutoClos
                 fileIo.deleteFile(f);
                 return DeleteResult.SUCCESS;
               } catch (Exception e) {
-                LOGGER.debug("Failed to delete {}", f, e);
+                LOGGER.info("Failed to delete {}", f, e);
                 return DeleteResult.FAILURE;
               }
             })
