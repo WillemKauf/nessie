@@ -704,6 +704,8 @@ public interface IcebergMetadataUpdate {
 
     @Override
     default void applyToTable(IcebergTableMetadataUpdateState state) {
+      System.out.println(refName());
+      System.out.println(type());
       checkState(
           "main".equals(refName()) && "branch".equals(type()),
           "Nessie only supports the current snapshot-ref 'main', use Nessie's branches instead");
